@@ -89,7 +89,7 @@ void loop()  {
     RCtrl.writeBright();
     BCtrl.writeBright();
     GCtrl.writeBright();
-
+   
     if (SENDSERIAL) {
       Serial.print("  LastBright:  R = ");
       Serial.print(RCtrl.lastBrightness);

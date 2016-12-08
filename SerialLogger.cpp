@@ -1,5 +1,5 @@
 #include "SerialLogger.h"
-#include "Arduino.h"
+
 
 SerialLogger* SerialLogger::instance = NULL;
 
@@ -27,7 +27,7 @@ void SerialLogger::logDataToConsole(char* dataString){
   if(!enabled){
     return;
   }
-  Serial.println(dataString);
+  Serial.print(dataString);
 }
 
 SerialLogger::~SerialLogger(){

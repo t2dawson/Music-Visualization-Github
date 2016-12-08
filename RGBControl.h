@@ -32,6 +32,7 @@ class RGBControl {
     void micVal2Brightness();
     void writeBright();
     int calcDC();
+    void printMicData();
 };
 
 #endif // __RGBCONTROL_HEADER__

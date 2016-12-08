@@ -2,6 +2,8 @@
 #define __SERIAL_LOGGER__HEADER__
 #define BAUD_RATE 57600
 
+#include "Arduino.h"
+
 class SerialLogger {
 
     bool enabled;

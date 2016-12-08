@@ -1,5 +1,7 @@
 #include "RGBControl.h"
-#include "Arduino.h"
+#include "SerialLogger.h"
+
+
 
 RGBControl::RGBControl (const RGBControl &object) {
   ledPin = object.ledPin;
@@ -96,5 +98,11 @@ int RGBControl::calcDC() {
   {
     return 1;
   }
+}
+
+void RGBControl::printMicData(){
+  char printBuff[40];
+  sprintf(printBuff, "MicVal: %i\tBright: %i\tLastBright: %i\n", micVal,brightness,lastBrightness);
+  SerialLogger::getInstance()->logDataToConsole(printBuff);
 }
 
