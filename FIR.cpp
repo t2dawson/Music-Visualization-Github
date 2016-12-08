@@ -1,6 +1,7 @@
 #include "FIR.h"
 #include "Arduino.h"
 
+<<<<<<< HEAD
 FIR::FIR() {
   k = 0; //initialize so that we start to read at index 0
   memset(values, 0, sizeof(float)*FILTERTAPS);
@@ -44,3 +45,47 @@ float FIR::firProcess(float input[], int sizeOfInput) {
 }
 
 
+=======
+
+FIR::FIR(float * newCoeffs,float newGain){
+
+memset(values,0,FILTERTAPS);
+
+setGain(newGain);
+setCoefficients(newCoeffs);
+
+  k = 0;
+}
+
+
+void FIR::setGain(float newGain){
+
+  gain = newGain;
+}
+
+void FIR:: setCoefficients(float * newCoeffs){
+  for (int i =0; i < FILTERTAPS; i++){
+    coeffs[i] = newCoeffs[i];
+  }
+}
+void FIR::setCoeff(int index,float newCoef){
+    coeffs[index] = newCoef;
+}
+
+int FIR::process (int input){
+  
+  float out = 0;
+  values[k] = input;
+
+  for (int i = 0; i < FILTERTAPS; i++){
+    out +=(coeffs[i] * values[(i + k) % FILTERTAPS]);
+  }
+  out /= gain;
+
+  k = (k+1)% FILTERTAPS;
+
+  return (int)out;
+}
+
+
+>>>>>>> origin/Tahir_develop

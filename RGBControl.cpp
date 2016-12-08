@@ -1,6 +1,7 @@
 #include "RGBControl.h"
 #include "Arduino.h"
 
+<<<<<<< HEAD
 RGBControl::RGBControl (const RGBControl &object) {
   ledPin = object.ledPin;
   brightness = object.brightness;
@@ -43,10 +44,31 @@ void RGBControl::setFade(int newUpFade, int newDownFade) {
 }
 
 void RGBControl::setMinMax(int newMin, int newMax) {
+=======
+RGBControl::RGBControl(int pin){
+
+    ledPin = pin;
+    brightness = 0;
+    micVal = 0;
+    micMin = 255;
+    micMax = 0;  
+}
+
+void RGBControl::setZero(){
+  brightness = 0;
+}
+
+void RGBControl::setPin(int pin){
+  ledPin = pin;
+}
+
+void RGBControl::setMinMax(int newMin, int newMax){
+>>>>>>> origin/Tahir_develop
   micMin = newMin;
   micMax = newMax;
 }
 
+<<<<<<< HEAD
 void RGBControl::setDCVal(int newDCVal) {
   DCVal = newDCVal;
 }
@@ -98,3 +120,16 @@ int RGBControl::calcDC() {
   }
 }
 
+=======
+void RGBControl::micVal2Brightness(){
+  micMin = min(micVal,micMin);
+  micMax = max(micVal,micMax);
+
+  brightness = (int)(((double)(micVal-micMin))/((double)(micMax-micMin))*MAX_REL_VAL);
+}
+
+void RGBControl::writeBright(){
+  analogWrite(ledPin,brightness);
+}
+
+>>>>>>> origin/Tahir_develop
