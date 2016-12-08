@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #ifndef __RGB_CONTROL__HEADER__
 #define __RGB_CONTROL__HEADER__
 
@@ -37,30 +36,3 @@ class RGBControl {
 
 #endif // __RGBCONTROL_HEADER__
 
-=======
-#ifndef __RGBCONTROL_HEADER__
-#define __RGBCONTROL_HEADER__
-#define MAX_REL_VAL 255
-
-class RGBControl{
-
-public :
-  
-  int ledPin;
-  int micVal;
-  int brightness;
-  int micMax;
-  int micMin;
-
-  void setZero();
-  void setPin(int pin);
-  void setMinMax(int newMin, int newMax);
-  void micVal2Brightness();
-  void writeBright();
-  RGBControl(int pin);
-  
-};
-
-
-#endif //__RGBControl_HEADER__
->>>>>>> origin/Tahir_develop
