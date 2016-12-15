@@ -1,7 +1,4 @@
 #include "RGBControl.h"
-#include "SerialLogger.h"
-
-
 
 RGBControl::RGBControl (const RGBControl &object) {
   ledPin = object.ledPin;
@@ -57,8 +54,8 @@ void RGBControl::micVal2Brightness(){
   micVal = abs(micVal - DCVal);
   micMin = min(micVal, micMin);
   micMax = max(micVal, micMax);
-  brightness = (int)(((double)(micVal - micMin) / (double)(micMax - micMin)) * MAXVALREL) - 1;
-  brightness = min(max(brightness - 10, 0), MAXVALREL - 1);
+  brightness = (int)(((double)(micVal - micMin) / (double)(micMax - micMin)) * MAXVALREL - 1);
+  brightness = min(max(brightness - 20, 0), MAXVALREL - 1);
 }
 
 void RGBControl::writeBright() {

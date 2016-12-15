@@ -5,7 +5,8 @@
 #define AVGNUM 30
 #define WAKEUPSAMP 2
 #define FADEGAP 1
-#define SENDSERIAL 1
+
+#include "SerialLogger.h"
 
 class RGBControl {
   private:

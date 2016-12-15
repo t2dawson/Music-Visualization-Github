@@ -9,13 +9,19 @@ long Time1 = 0;
 long timeDT = 0;
 
 
-int mic_NoFilt[BUFFER] = {0};
+int mic_NoFilt[BUFFER];
 
 RGBControl RCtrl(3, 50, 20), GCtrl(5, 50, 7), BCtrl(7, 50, 2);
 FIR firR, firG, firB;
 
 void setup()  {
-
+  setupADC();
+  RCtrl.setMinMax(0,10);
+  GCtrl.setMinMax(0,10);
+  BCtrl.setMinMax(0,10);
+  
+  Serial.begin(115200);
+  memset(mic_NoFilt, 0, sizeof(int)*BUFFER);
   if (SENDSERIAL) {
     Serial.begin(115200);
   }
@@ -31,9 +37,9 @@ void setup()  {
   firR.setCoefficients(Rcoef);
   firR.setGain(1);
   firB.setCoefficients(Bcoef);
-  firB.setGain( 1.9663);
+  firB.setGain(2);
   firG.setCoefficients(Gcoef);
-  firG.setGain(2.0864);
+  firG.setGain(0.5);
   //if you want to add other things to setup(), do it here
 }
 
@@ -46,15 +52,18 @@ void loop()  {
     if (  Time2 - Time1 >= 56) {
       Time2 = micros();
       mic_NoFilt[Buff] = ADCH;//analogRead(micPin);
+     // Serial.println(mic_NoFilt[Buff]);
       timeDT = Time2 - Time1;
       Time1 = micros();
       Buff++;
     }
   }
-  RCtrl.micVal = (int)(firR.firProcess(((float*)mic_NoFilt), BUFFER));
-  GCtrl.micVal = (int)(firG.firProcess(((float*)mic_NoFilt), BUFFER));
-  BCtrl.micVal = (int)(firB.firProcess(((float*)mic_NoFilt), BUFFER));
-
+  for(Buff =0; Buff < BUFFER; Buff++){
+  RCtrl.micVal = (int)(firR.firProcess(mic_NoFilt[Buff]));
+  GCtrl.micVal = (int)(firG.firProcess(mic_NoFilt[Buff]));
+  BCtrl.micVal = (int)(firB.firProcess(mic_NoFilt[Buff]));
+  }
+  //Serial.println(RCtrl.micVal);
   if ( RCtrl.calcDC() && GCtrl.calcDC() && BCtrl.calcDC()) {
     if (SENDSERIAL) {
       Serial.print("  TIME: ");
@@ -72,6 +81,7 @@ void loop()  {
     RCtrl.micVal2Brightness();
     GCtrl.micVal2Brightness();
     BCtrl.micVal2Brightness();
+    
     if (SENDSERIAL) {
       Serial.print("  MinMax:  R = ");
       Serial.print(RCtrl.micMin); Serial.print(","); Serial.print(RCtrl.micMax);
@@ -90,13 +100,13 @@ void loop()  {
     BCtrl.writeBright();
     GCtrl.writeBright();
    
-    if (SENDSERIAL) {
-      Serial.print("  LastBright:  R = ");
-      Serial.print(RCtrl.lastBrightness);
-      Serial.print("  G = ");
-      Serial.print(GCtrl.lastBrightness);
-      Serial.print("  B = ");
-      Serial.println(BCtrl.lastBrightness);
+    if (SENDSERIAL){
+          Serial.print("  LastBright:  R = ");
+          Serial.print(RCtrl.lastBrightness);
+          Serial.print("  G = ");
+          Serial.print(GCtrl.lastBrightness); 
+          Serial.print("  B = ");
+          Serial.println(BCtrl.lastBrightness); 
     }
   }
 }

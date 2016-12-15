@@ -29,18 +29,18 @@ void FIR::setCoefficient(float newCoeff, int index) {
   coeffs[index] = newCoeff;
 }
 
-float FIR::firProcess(float input[], int sizeOfInput) {
-  float out = 0; // out is the return variable. It is set to 0 every time we call the filter!
-  for (int j = 0; j < sizeOfInput; j++) {
-    values[k] = input[j];                                            // store the input of the routine (contents of the 'in' variable) in the array at the current pointer position
-    for (int i = 0; i < FILTERTAPS; i++)  {                         // we step through the array
-      out += coeffs[i] * values[(i + k) % FILTERTAPS];             // ... and add and multiply each value to accumulate the output
-                                                                  //  (i + k) % filterTaps creates a cyclic way of getting through the array
+float FIR::firProcess(float input) {
+  float out = 0 ; // out is the return variable. It is set to 0 every time we call the filter!
+  values[k] = input;      
+                                                                  // store the input of the routine (contents of the 'in' variable) in the array at the current pointer position
+    for (int i = 0; i < FILTERTAPS; i++)  {     
+                                                            // we step through the array
+      out += (coeffs[i] * values[(i + k) % FILTERTAPS]);             // ... and add and multiply each value to accumulate the output                                                            //  (i + k) % filterTaps creates a cyclic way of getting through the array
     }
-    out /= gain;                                                // We need to scale the output (unless the coefficients provide unity gain in the passband)
+                                                      // We need to scale the output (unless the coefficients provide unity gain in the passband)
     k = (k + 1) % FILTERTAPS;                                  // k is increased and wraps around the filterTaps, so next time we will overwrite the oldest saved sample in the array
-  }
-  return out;                                                // we send the output value back to whoever called the routine
+  
+  return (out/gain);                                  // we send the output value back to whoever called the routine
 }
 
 

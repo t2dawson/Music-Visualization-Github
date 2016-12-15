@@ -16,7 +16,7 @@ class FIR {
     void setGain(float newGain);
     void setCoefficients(float* newCoeffs);
     void setCoefficient(float newCoeff, int index);
-    float firProcess(float input[], int sizeOfInput);
+    float firProcess(float input);
 
     FIR();
     FIR(float newGain, float* newCoeffs);
