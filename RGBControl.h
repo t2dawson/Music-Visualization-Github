@@ -4,7 +4,7 @@
 #define MAXVALREL 256
 #define AVGNUM 30
 #define WAKEUPSAMP 2
-#define FADEGAP 1
+#define FADEGAP 2
 
 #include "SerialLogger.h"
 
@@ -15,6 +15,7 @@ class RGBControl {
     int sumDCVal;
     int upFade;
     int downFade;
+    bool DCValCalculated;
   public:
     int ledPin;
     int brightness;

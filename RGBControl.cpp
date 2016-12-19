@@ -17,7 +17,8 @@ RGBControl::RGBControl (const RGBControl &object) {
 RGBControl::RGBControl(int pinNum, int upFadeNum, int downFadeNum) {
   ledPin = pinNum;
   micVal = 0;
-  DCVal = -1;
+  DCVal = 0;
+  DCValCalculated == false;
   brightness = 0;
   lastBrightness = 0;
   micMax = 0;
@@ -54,7 +55,7 @@ void RGBControl::micVal2Brightness(){
   micVal = abs(micVal - DCVal);
   micMin = min(micVal, micMin);
   micMax = max(micVal, micMax);
-  brightness = (int)(((double)(micVal - micMin) / (double)(micMax - micMin)) * MAXVALREL - 1);
+  brightness = (int)(((float)(micVal - micMin) / (float)(micMax - micMin)) * MAXVALREL - 1);
   brightness = min(max(brightness - 20, 0), MAXVALREL - 1);
 }
 
@@ -64,12 +65,12 @@ void RGBControl::writeBright() {
   {
     counter++;
     if (lastBrightness > brightness) {
-      lastBrightness = lastBrightness - FADEGAP;
+      lastBrightness-- ;
       if (counter >= downFade) break;
     }
     else
     {
-      lastBrightness = lastBrightness + FADEGAP;
+      lastBrightness++ ;
       if (counter >= upFade) break;
     }
     analogWrite(ledPin, lastBrightness);
@@ -77,16 +78,17 @@ void RGBControl::writeBright() {
 }
 
 int RGBControl::calcDC() {
-  if (DCVal == -1)
+  if (!DCValCalculated)
   {
     if (counter >= WAKEUPSAMP) sumDCVal = sumDCVal + micVal;
     counter++;
-    if (counter == AVGNUM + WAKEUPSAMP )
+    if (counter == (AVGNUM + WAKEUPSAMP))
     {
       DCVal = sumDCVal / AVGNUM;
       if (SENDSERIAL) {
         Serial.println(DCVal);
       }
+      DCValCalculated == true;
       return 1;
     }
     return 0;

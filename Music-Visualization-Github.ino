@@ -15,10 +15,10 @@ RGBControl RCtrl(3, 50, 20), GCtrl(5, 50, 7), BCtrl(7, 50, 2);
 FIR firR, firG, firB;
 
 void setup()  {
-  setupADC();
-  RCtrl.setMinMax(0,10);
-  GCtrl.setMinMax(0,10);
-  BCtrl.setMinMax(0,10);
+    setupADC();
+//  RCtrl.setMinMax(0,10);
+//  GCtrl.setMinMax(0,10);
+//  BCtrl.setMinMax(0,10);
   
   Serial.begin(115200);
   memset(mic_NoFilt, 0, sizeof(int)*BUFFER);
@@ -51,19 +51,18 @@ void loop()  {
     Time2 = micros();
     if (  Time2 - Time1 >= 56) {
       Time2 = micros();
-      mic_NoFilt[Buff] = ADCH;//analogRead(micPin);
+      mic_NoFilt[Buff] = ADCH;            //analogRead(micPin);
      // Serial.println(mic_NoFilt[Buff]);
       timeDT = Time2 - Time1;
       Time1 = micros();
       Buff++;
     }
   }
-  for(Buff =0; Buff < BUFFER; Buff++){
-  RCtrl.micVal = (int)(firR.firProcess(mic_NoFilt[Buff]));
-  GCtrl.micVal = (int)(firG.firProcess(mic_NoFilt[Buff]));
-  BCtrl.micVal = (int)(firB.firProcess(mic_NoFilt[Buff]));
-  }
-  //Serial.println(RCtrl.micVal);
+  
+  RCtrl.micVal = firR.firProcess(mic_NoFilt,BUFFER);
+  GCtrl.micVal = firG.firProcess(mic_NoFilt,BUFFER);
+  BCtrl.micVal = firB.firProcess(mic_NoFilt,BUFFER);
+  
   if ( RCtrl.calcDC() && GCtrl.calcDC() && BCtrl.calcDC()) {
     if (SENDSERIAL) {
       Serial.print("  TIME: ");
