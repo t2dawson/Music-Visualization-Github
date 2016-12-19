@@ -1,4 +1,4 @@
-#include "FIR.h"
+#include "FIRDefinitions.h"
 #include "RGBControl.h"
 #include "Setup.h"
 #include "LoggingFunctions.h"
@@ -11,7 +11,7 @@ int timeDT = 0;
 int mic_NoFilt[BUFFER];
 
 RGBControl RCtrl(3, 50, 20), GCtrl(5, 50, 7), BCtrl(7, 50, 2);
-FIR firR, firG, firB;
+FIR<FILTERTAPS> firR, firG, firB;
 
 void setup()  {
   setupADC();

@@ -2,13 +2,14 @@
 #define __FIR_FILTER__HEADER__
 
 #define FILTERTAPS 30
+
+template<const int filterTaps>
 class FIR {
 
   private:
-    float values[FILTERTAPS];
-    float coeffs[FILTERTAPS];
-    //declare gain coefficient to scale the output back to normal
-    float gain; // set to 1 and input unity to see what this needs to be
+    float values[filterTaps];
+    float coeffs[filterTaps];               
+    float gain; //declare gain coefficient to scale the output back to normal
     int k; // k stores the index of the current array read to create a circular memory through the array
 
   public:
