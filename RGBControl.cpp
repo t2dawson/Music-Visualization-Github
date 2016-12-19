@@ -51,7 +51,7 @@ void RGBControl::setDCVal(int newDCVal) {
   DCVal = newDCVal;
 }
 
-void RGBControl::micVal2Brightness(){
+void RGBControl::micVal2Brightness() {
   micVal = abs(micVal - DCVal);
   micMin = min(micVal, micMin);
   micMax = max(micVal, micMax);
@@ -85,9 +85,7 @@ int RGBControl::calcDC() {
     if (counter == (AVGNUM + WAKEUPSAMP))
     {
       DCVal = sumDCVal / AVGNUM;
-      if (SENDSERIAL) {
-        Serial.println(DCVal);
-      }
+      printDC();
       DCValCalculated == true;
       return 1;
     }
@@ -99,9 +97,9 @@ int RGBControl::calcDC() {
   }
 }
 
-void RGBControl::printMicData(){
-  char printBuff[40];
-  sprintf(printBuff, "MicVal: %i\tBright: %i\tLastBright: %i\n", micVal,brightness,lastBrightness);
-  SerialLogger::getInstance()->logDataToConsole(printBuff);
+void RGBControl::printDC() {
+  char printBuffer[4];
+  sprintf(printBuffer, "DCVal= %i", DCVal);
+  SerialLogger::getInstance()->logDataToConsole(printBuffer);
 }
 

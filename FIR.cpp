@@ -36,7 +36,7 @@ int FIR::firProcess(int* input, int sizeOfInput) {
     values[k] = (float)input[i];      // store the input of the routine (contents of the 'in' variable) in the array at the current pointer position
     if (i == (sizeOfInput - 1)) {
 
-    for (int j = 0; j < FILTERTAPS; j++)  {
+      for (int j = 0; j < FILTERTAPS; j++)  {
         // we step through the array
         out += (coeffs[j] * values[(j + k) % FILTERTAPS]);             // ... and add and multiply each value to accumulate the output                                                            //  (i + k) % filterTaps creates a cyclic way of getting through the array
       }

@@ -7,6 +7,7 @@
 #define FADEGAP 2
 
 #include "SerialLogger.h"
+#include "Arduino.h"
 
 class RGBControl {
   private:
@@ -34,7 +35,7 @@ class RGBControl {
     void micVal2Brightness();
     void writeBright();
     int calcDC();
-    void printMicData();
+    void printDC();
 };
 
 #endif // __RGBCONTROL_HEADER__

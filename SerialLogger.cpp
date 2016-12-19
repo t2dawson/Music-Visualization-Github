@@ -23,14 +23,14 @@ SerialLogger* SerialLogger::getInstance() {
   return instance;
 }
 
-void SerialLogger::logDataToConsole(char* dataString){
-  if(!enabled){
+void SerialLogger::logDataToConsole(char* dataString) {
+  if (!enabled) {
     return;
   }
   Serial.print(dataString);
 }
 
-SerialLogger::~SerialLogger(){
+SerialLogger::~SerialLogger() {
   enabled = false;
   delete instance;
 }

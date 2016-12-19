@@ -1,30 +1,27 @@
 #include "FIR.h"
 #include "RGBControl.h"
 #include "Setup.h"
+#include "LoggingFunctions.h"
 
 #define BUFFER 20
 
-long Time2 = 0;
-long Time1 = 0;
-long timeDT = 0;
-
-
+unsigned long time2 = 0;
+unsigned long time1 = 0;
+int timeDT = 0;
 int mic_NoFilt[BUFFER];
 
 RGBControl RCtrl(3, 50, 20), GCtrl(5, 50, 7), BCtrl(7, 50, 2);
 FIR firR, firG, firB;
 
 void setup()  {
-    setupADC();
-//  RCtrl.setMinMax(0,10);
-//  GCtrl.setMinMax(0,10);
-//  BCtrl.setMinMax(0,10);
-  
+  setupADC();
+  //  RCtrl.setMinMax(0,10);
+  //  GCtrl.setMinMax(0,10);
+  //  BCtrl.setMinMax(0,10);
+
   Serial.begin(115200);
   memset(mic_NoFilt, 0, sizeof(int)*BUFFER);
-  if (SENDSERIAL) {
-    Serial.begin(115200);
-  }
+
   float Rcoef[FILTERTAPS] = {0.021987, 0.024035, 0.026037, 0.027974, 0.029828, 0.03158, 0.033212, 0.034709, 0.036054, 0.037234, 0.038238, 0.039053, 0.039672, 0.040089, 0.040298, 0.040298, 0.040089, 0.039672, 0.039053, 0.038238, 0.037234, 0.036054, 0.034709, 0.033212, 0.03158, 0.029828, 0.027974, 0.026037, 0.024035, 0.021987};
   //{0.030352,0.03572,0.04093,0.045848,0.050345,0.054301,0.057606,0.06017,0.061921,0.062808,0.062808,0.061921,0.06017,0.057606,0.054301,0.050345,0.045848,0.04093,0.03572,0.030352};
   //{0.0070018,0.0094086,0.016214,0.026914,0.040488,0.055516,0.070343,0.083292,0.092868,0.097955,0.097955,0.092868,0.083292,0.070343,0.055516,0.040488,0.026914,0.016214,0.0094086,0.0070018};
@@ -48,64 +45,36 @@ void loop()  {
   int Buff = 0;
 
   while (Buff < BUFFER) {
-    Time2 = micros();
-    if (  Time2 - Time1 >= 56) {
-      Time2 = micros();
-      mic_NoFilt[Buff] = ADCH;            //analogRead(micPin);
-     // Serial.println(mic_NoFilt[Buff]);
-      timeDT = Time2 - Time1;
-      Time1 = micros();
+    time2 = micros();
+    if (  time2 - time1 >= 56) {
+      time2 = micros();
+      mic_NoFilt[Buff] = ADCH;                        //analogRead(micPin);
+      timeDT = time2 - time1;
+      time1 = micros();
       Buff++;
     }
   }
-  
-  RCtrl.micVal = firR.firProcess(mic_NoFilt,BUFFER);
-  GCtrl.micVal = firG.firProcess(mic_NoFilt,BUFFER);
-  BCtrl.micVal = firB.firProcess(mic_NoFilt,BUFFER);
-  
+
+  RCtrl.micVal = firR.firProcess(mic_NoFilt, BUFFER);
+  GCtrl.micVal = firG.firProcess(mic_NoFilt, BUFFER);
+  BCtrl.micVal = firB.firProcess(mic_NoFilt, BUFFER);
+
   if ( RCtrl.calcDC() && GCtrl.calcDC() && BCtrl.calcDC()) {
     if (SENDSERIAL) {
-      Serial.print("  TIME: ");
-      Serial.print(timeDT);
-      Serial.print("  NoFiltVal: ");
-      Serial.print(mic_NoFilt[BUFFER - 1]);
-      Serial.print("  Val:  R = ");
-      Serial.print(RCtrl.micVal);
-      Serial.print("  G = ");
-      Serial.print(GCtrl.micVal);
-      Serial.print("  B = ");
-      Serial.print(BCtrl.micVal);
+      printTimeData(time1, time2, timeDT);
+      printMicValues(mic_NoFilt[BUFFER - 1], RCtrl.micVal, GCtrl.micVal, BCtrl.micVal);
     }
 
     RCtrl.micVal2Brightness();
     GCtrl.micVal2Brightness();
     BCtrl.micVal2Brightness();
-    
-    if (SENDSERIAL) {
-      Serial.print("  MinMax:  R = ");
-      Serial.print(RCtrl.micMin); Serial.print(","); Serial.print(RCtrl.micMax);
-      Serial.print("  G = ");
-      Serial.print(GCtrl.micMin); Serial.print(","); Serial.print(GCtrl.micMax);
-      Serial.print("  B = ");
-      Serial.print(BCtrl.micMin); Serial.print(","); Serial.print(BCtrl.micMax);
-      Serial.print("  Bright:  R = ");
-      Serial.print(RCtrl.brightness);
-      Serial.print("  G = ");
-      Serial.print(GCtrl.brightness);
-      Serial.print("  B = ");
-      Serial.print(BCtrl.brightness);
-    }
+
     RCtrl.writeBright();
     BCtrl.writeBright();
     GCtrl.writeBright();
-   
-    if (SENDSERIAL){
-          Serial.print("  LastBright:  R = ");
-          Serial.print(RCtrl.lastBrightness);
-          Serial.print("  G = ");
-          Serial.print(GCtrl.lastBrightness); 
-          Serial.print("  B = ");
-          Serial.println(BCtrl.lastBrightness); 
+    if (SENDSERIAL) {
+      printMinMaxData(RCtrl, GCtrl, BCtrl);
+      printBrightnessData(RCtrl, GCtrl, BCtrl);
     }
   }
 }
