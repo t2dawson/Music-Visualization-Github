@@ -21,8 +21,8 @@ RGBControl::RGBControl(int pinNum, int upFadeNum, int downFadeNum) {
   DCValCalculated == false;
   brightness = 0;
   lastBrightness = 0;
-  micMax = 0;
-  micMin = 255; //1023;
+  micMax = INITIAL_RGB_MAX;
+  micMin = INITIAL_RGB_MIN;
   counter = 0;
   sumDCVal = 0;
   upFade = upFadeNum;

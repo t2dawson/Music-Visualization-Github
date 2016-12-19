@@ -1,8 +1,6 @@
 #ifndef __FIR_FILTER__HEADER__
 #define __FIR_FILTER__HEADER__
 
-#define FILTERTAPS 30
-
 template<const int filterTaps>
 class FIR {
 

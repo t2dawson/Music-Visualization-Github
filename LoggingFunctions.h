@@ -1,5 +1,6 @@
 #ifndef __LOGGING_FUNCTIONS__HEADER__
 #define __LOGGING_FUNCTION__HEADER__
+
 #include "RGBControl.h"
 
 void printMicValues(int unfilteredVal, int RValue, int GValue, int BValue);

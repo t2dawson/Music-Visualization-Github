@@ -1,9 +1,11 @@
-#include "FIR.h"
+#ifndef __FIR_DEFINITIONS__HEADER__
+#define __FIR_DEFINITIONS__HEADER__
 
+#include "FIR.h"
 
 template<const int filterTaps> FIR<filterTaps>::FIR() {
   k = 0; //initialize so that we start to read at index 0
-  memset(values, 0, sizeof(float)*FILTERTAPS);
+  memset(values, 0, sizeof(float)*filterTaps);
   //TODO calculate default gain?
   //TODO calculate default coefs?
 }
@@ -46,4 +48,4 @@ template<const int filterTaps> int FIR<filterTaps>::firProcess(int* input, int s
   return (int)(out / gain);                                // we send the output value back to whoever called the routine
 }
 
-
+#endif // __FIR_DEFINITIONS__HEADER__

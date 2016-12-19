@@ -3,14 +3,12 @@
 #include "Setup.h"
 #include "LoggingFunctions.h"
 
-#define BUFFER 20
-
 unsigned long time2 = 0;
 unsigned long time1 = 0;
 int timeDT = 0;
 int mic_NoFilt[BUFFER];
 
-RGBControl RCtrl(3, 50, 20), GCtrl(5, 50, 7), BCtrl(7, 50, 2);
+RGBControl RCtrl(LED_R, DEFAULT_R_UPFADE,DEFAULT_R_DOWNFADE), GCtrl(LED_G, DEFAULT_G_UPFADE, DEFAULT_G_DOWNFADE), BCtrl(LED_B, DEFAULT_B_DOWNFADE, DEFAULT_B_DOWNFADE);
 FIR<FILTERTAPS> firR, firG, firB;
 
 void setup()  {
@@ -32,11 +30,11 @@ void setup()  {
   //{-0.0063113,0.030439,0.034878,-0.0095334,-0.057106,-0.039805,0.051455,0.12769,0.042445,-0.54343,0.54343,-0.042445,-0.12769,-0.051455,0.039805,0.057106,0.0095334,-0.034878,-0.030439,0.0063113};
   //{0.0012888,-0.0014432,-0.007129,-0.0119,-0.0030922,0.027927,0.065647,0.063596,-0.04974,-0.57121,0.57121,0.04974,-0.063596,-0.065647,-0.027927,0.0030922,0.0119,0.007129,0.0014432,-0.0012888};
   firR.setCoefficients(Rcoef);
-  firR.setGain(1);
+  firR.setGain(DEFAULT_R_GAIN);
   firB.setCoefficients(Bcoef);
-  firB.setGain(2);
+  firB.setGain(DEFAULT_B_GAIN);
   firG.setCoefficients(Gcoef);
-  firG.setGain(0.5);
+  firG.setGain(DEFAULT_G_GAIN);
   //if you want to add other things to setup(), do it here
 }
 

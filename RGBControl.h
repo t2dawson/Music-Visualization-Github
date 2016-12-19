@@ -1,13 +1,9 @@
 #ifndef __RGB_CONTROL__HEADER__
 #define __RGB_CONTROL__HEADER__
 
-#define MAXVALREL 256
-#define AVGNUM 30
-#define WAKEUPSAMP 2
-#define FADEGAP 2
-
 #include "SerialLogger.h"
 #include "Arduino.h"
+#include "DefinedConstants.h"
 
 class RGBControl {
   private:
