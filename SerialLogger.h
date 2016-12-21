@@ -15,7 +15,6 @@ class SerialLogger {
     void logDataToConsole(char* dataString);
     void enableLogger();
     void disableLogger();
-    ~SerialLogger();
 };
 
 #endif // __SERIAL_LOGGER__HEADER

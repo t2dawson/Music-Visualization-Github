@@ -13,11 +13,10 @@ FIR<FILTERTAPS> firR, firG, firB;
 
 void setup()  {
   setupADC();
-  //  RCtrl.setMinMax(0,10);
-  //  GCtrl.setMinMax(0,10);
-  //  BCtrl.setMinMax(0,10);
-
-  Serial.begin(115200);
+    RCtrl.setMinMax(0,12);
+    GCtrl.setMinMax(0,11);
+    BCtrl.setMinMax(0,12);
+    
   memset(mic_NoFilt, 0, sizeof(int)*BUFFER);
 
   float Rcoef[FILTERTAPS] = {0.021987, 0.024035, 0.026037, 0.027974, 0.029828, 0.03158, 0.033212, 0.034709, 0.036054, 0.037234, 0.038238, 0.039053, 0.039672, 0.040089, 0.040298, 0.040298, 0.040089, 0.039672, 0.039053, 0.038238, 0.037234, 0.036054, 0.034709, 0.033212, 0.03158, 0.029828, 0.027974, 0.026037, 0.024035, 0.021987};
@@ -56,26 +55,19 @@ void loop()  {
   RCtrl.micVal = firR.firProcess(mic_NoFilt, BUFFER);
   GCtrl.micVal = firG.firProcess(mic_NoFilt, BUFFER);
   BCtrl.micVal = firB.firProcess(mic_NoFilt, BUFFER);
-
+  
   if ( RCtrl.calcDC() && GCtrl.calcDC() && BCtrl.calcDC()) {
-    if (SENDSERIAL) {
-      printTimeData(time1, time2, timeDT);
-      printMicValues(mic_NoFilt[BUFFER - 1], RCtrl.micVal, GCtrl.micVal, BCtrl.micVal);
-    }
-
+       
     RCtrl.micVal2Brightness();
     GCtrl.micVal2Brightness();
     BCtrl.micVal2Brightness();
-
+    
+   
     RCtrl.writeBright();
     BCtrl.writeBright();
     GCtrl.writeBright();
-    if (SENDSERIAL) {
-      printMinMaxData(RCtrl, GCtrl, BCtrl);
-      printBrightnessData(RCtrl, GCtrl, BCtrl);
-    }
-  }
+    
+   
+  }      
 }
-
-
 

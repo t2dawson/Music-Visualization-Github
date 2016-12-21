@@ -26,7 +26,7 @@
 #define MAXVALREL 256
 #define AVGNUM 30
 #define WAKEUPSAMP 2
-#define FADEGAP 2
+#define FADEGAP 1
 
 // Default LED pin constants
 #define LED_R 3

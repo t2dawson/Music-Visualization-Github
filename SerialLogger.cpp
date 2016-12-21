@@ -30,10 +30,6 @@ void SerialLogger::logDataToConsole(char* dataString) {
   Serial.print(dataString);
 }
 
-SerialLogger::~SerialLogger() {
-  enabled = false;
-  delete instance;
-}
 
 
 

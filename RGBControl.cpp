@@ -18,7 +18,7 @@ RGBControl::RGBControl(int pinNum, int upFadeNum, int downFadeNum) {
   ledPin = pinNum;
   micVal = 0;
   DCVal = 0;
-  DCValCalculated == false;
+  DCValCalculated = false;
   brightness = 0;
   lastBrightness = 0;
   micMax = INITIAL_RGB_MAX;
@@ -85,8 +85,8 @@ int RGBControl::calcDC() {
     if (counter == (AVGNUM + WAKEUPSAMP))
     {
       DCVal = sumDCVal / AVGNUM;
-      printDC();
-      DCValCalculated == true;
+    //  printDC();
+      DCValCalculated = true;
       return 1;
     }
     return 0;
@@ -98,8 +98,8 @@ int RGBControl::calcDC() {
 }
 
 void RGBControl::printDC() {
-  char printBuffer[4];
-  sprintf(printBuffer, "DCVal= %i", DCVal);
+  char printBuffer[10];
+  sprintf(printBuffer, "DCVal= %i\n", DCVal);
   SerialLogger::getInstance()->logDataToConsole(printBuffer);
 }
 
